@@ -1,0 +1,30 @@
+.container
+  h2 Add a new track
+  form action="https://itunes.apple.com/search?callback=callback&media=music&term=" method="get"
+    input.form-control type="search" name="term" autocomplete="off"
+  hr
+  ul.list-group
+javascript:
+  document.querySelector('form').onsubmit = function(event){
+    var script = document.createElement('script')
+    script.src = event.target.action + document.querySelector('input').value
+    document.body.appendChild(script)
+    event.preventDefault()
+  }
+  document.querySelector('.list-group').onclick = function(event){
+    if (event.target.classList.contains('disabled')) return
+    event.target.classList.add('disabled')
+    fetch('/tracks', {method: 'POST', body: `{"data": ${event.target.dataset.track}}`,
+      headers: { "Content-Type" : "application/json" }})
+  }
+  callback = function(result){
+    var list = document.querySelector('.list-group')
+    list.innerHTML = ''
+    result.results.forEach(function(result){
+      var element = document.createElement('div')
+      element.className = 'list-group-item'
+      element.innerText = [result.artistName, result.trackName].join(' - ')
+      element.dataset.track = JSON.stringify(result)
+      list.appendChild(element)
+    })
+  }
