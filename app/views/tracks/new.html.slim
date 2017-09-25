@@ -1,9 +1,11 @@
 .container
-  h2 Add a new track
-  form action="https://itunes.apple.com/search?callback=callback&media=music&term=" method="get"
-    input.form-control type="search" name="term" autocomplete="off"
-  hr
-  ul.list-group
+  h2.text-center Search for tracks
+  .row.justify-content-center
+    .col-lg-6
+      form action="https://itunes.apple.com/search?callback=callback&media=music&term=" method="get"
+        input.form-control type="search" name="term" autocomplete="off"
+      hr
+      ul.list-group
 javascript:
   document.querySelector('form').onsubmit = function(event){
     var script = document.createElement('script')
