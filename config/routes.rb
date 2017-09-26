@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
-  resources :tracks, only: %i(new create)
+  resources :tracks, only: %i(index new create)
+  resources :players, only: %i(new create)
+  resources :games, only: %i(create update) do
+    post :answer, on: :member
+  end
   get '/tv', to: 'games#tv'
-  root 'tracks#new'
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  root 'games#index'
 end

@@ -1,0 +1,22 @@
+hr
+.row.justify-content-center
+  .col-lg-4.game class=('d-none' unless @game.in_progress?)
+    .card.timer-card.justify-content-center
+      svg width="250" height="250" viewbox="0 0 250 250"
+        path id="border" transform="translate(125, 125)"
+        path id="loader" transform="translate(125, 125) scale(.84)"
+    .card.result-card
+      img.card-img-top
+      .card-body
+        h3.artistName.card-title
+        h4.trackName.card-subtitle
+        .card-text.text-muted
+          span.collectionName>
+          ' -
+          span.releaseYear
+  .col-lg-4.lobby.text-center class=('d-none' if @game.in_progress?)
+    i.fa.fa-gamepad.fa-5x
+  .col-lg-6
+    .list-group
+      - @players.each do |player|
+        .list-group-item class="player-#{player.id}"= player.name

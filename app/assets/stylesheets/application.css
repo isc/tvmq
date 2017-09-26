@@ -13,3 +13,21 @@
  *= require_tree .
  *= require_self
  */
+
+svg {
+  display: block;
+  margin: 10px auto;
+}
+
+#loader 
+{ fill: #0088cc }
+
+#border 
+{ fill: #00517a }
+
+.buzzer {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  font-size: 400%;
+}
