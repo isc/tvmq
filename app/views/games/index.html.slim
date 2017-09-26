@@ -19,5 +19,9 @@ hr
       input.btn.btn-primary.btn-block type="submit" value="Send"
     / form method="get" action="JavaScript:update();"
     /   input#input.form-control type="text" size="30" autofocus=true
+hr
+button.btn.btn-info.btn-block onclick="startCasting()"
+  i.fa.fa-chrome>
+  ' ChromeCast
 javascript:
   player_id = #{session[:player_id]}
