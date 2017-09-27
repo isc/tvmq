@@ -6,8 +6,12 @@ App.gameChannel = App.cable.subscriptions.create { channel: "GameChannel" },
   received: (data) ->
     if data.event is 'new_player'
       newPlayer = document.createElement('div')
-      newPlayer.classList.add('list-group-item')
-      newPlayer.innerText = data.player_name
+      newPlayer.className = "list-group-item d-flex justify-content-between align-items-center player-#{data.player.id}"
+      newPlayer.innerText = data.player.name
+      score = document.createElement('span')
+      score.className = 'badge badge-primary badge-pill'
+      score.innerText = data.player.score
+      newPlayer.appendChild(score)
       document.querySelector('.list-group')?.appendChild(newPlayer)
     if data.event is 'game_start'
       document.querySelector('.lobby').classList.add('d-none')
@@ -18,9 +22,13 @@ App.gameChannel = App.cable.subscriptions.create { channel: "GameChannel" },
         document.querySelector('.buzzer').setAttribute('disabled', 'disabled')
       else if tv
         document.querySelector(".player-#{data.player_id}").classList.add('list-group-item-warning')
-        audio.pause()
+        audio?.pause()
     if data.event is 'answer' and tv
-      audio.play()
+      audio?.play()
+      playerItem = document.querySelector(".player-#{data.player.id}")
+      playerItem.classList.remove('list-group-item-warning')
+      playerItem.querySelector('.badge').innerText = data.player.score
+      playerItem.classList.add('list-group-item-success') if data.track_found || data.artist_found
       if data.artist_found && data.track_found
         displayResultCard(currentTrack)
       else
