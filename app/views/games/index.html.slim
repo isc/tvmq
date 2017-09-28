@@ -1,27 +1,27 @@
-hr
-.row.justify-content-center
-  .col.col-lg-3.lobby class=('d-none' if @game.in_progress?)
-    .list-group
-      - @players.each do |player|
-        .list-group-item.d-flex.justify-content-between.align-items-center
-          = player.name
-          - if player.id == session[:player_id]
-            span.badge.badge-primary.badge-pill Me
-    hr
-    = form_tag game_path(@game), id: 'start-game'
-      input.btn.btn-primary.btn-block type="submit" value="Start game"
-  .col.col-lg-3.text-center.game class=('d-none' unless @game.in_progress?)
-    button.btn.btn-primary.btn-danger.buzzer
-      i.fa.fa-bullhorn
-    = form_tag answer_game_path(@game), class: 'answer d-none'
-      .form-group
-        input.form-control.answer type="text" autofocus=true
-      input.btn.btn-primary.btn-block type="submit" value="Send"
-    / form method="get" action="JavaScript:update();"
-    /   input#input.form-control type="text" size="30" autofocus=true
-hr
-button.btn.btn-info.btn-block onclick="startCasting()"
-  i.fa.fa-chrome>
-  ' ChromeCast
+#player-vue
+  hr
+  .row.justify-content-center
+
+    .col.col-md-5.lobby v-if="!inProgress"
+      player-listing :players="players" :player-id="player.id" :in-progress="inProgress"
+      hr
+      = form_tag game_path(@game), 'v-on:submit.prevent': 'startGame($event)'
+        button.btn.btn-primary.btn-block
+          i.fa.fa-play-circle>
+          'Start game
+      hr
+      button.btn.btn-info.btn-block onclick="startCasting()"
+        i.fa.fa-chrome>
+        ' ChromeCast
+      = render 'tracks/link_to_new'
+
+    .col.col-lg-3.text-center.game v-if="inProgress"
+      button.btn.btn-primary.btn-danger.buzzer v-if="!answering" v-on:click="buzz" v-bind:disabled="buzzerDisabled"
+        i.fa.fa-bullhorn
+      = form_tag answer_game_path(@game), 'v-if': 'answering', 'v-on:submit.prevent': 'sendAnswer($event)'
+        .form-group
+          input.form-control v-model="answer" type="text" autofocus=true autocomplete="off"
+        input.btn.btn-primary.btn-block type="submit" value="Send"
+
 javascript:
-  player_id = #{session[:player_id]}
+  vue_data = #{{ { player: @current_player, inProgress: @game.in_progress?, players: @players }.to_json }}

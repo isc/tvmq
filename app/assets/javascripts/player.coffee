@@ -1,20 +1,36 @@
-document.querySelector('#start-game')?.onsubmit = (e) ->
-  fetch(this.action, method: 'PUT')
-  false
+return unless document.querySelector('#player-vue')
 
-document.querySelector('.buzzer')?.onclick = ->
-  App.gameChannel.send event: 'buzz', player_id: player_id
-  document.querySelector('.answer').classList.remove('d-none')
-  document.querySelector('.buzzer').classList.add('d-none')
-
-document.querySelector('.answer')?.onsubmit = ->
-  fetch this.action,
-    method: 'POST'
-    body: JSON.stringify({value: this.querySelector('input[type=text]').value})
-    headers: {'Content-Type': 'application/json'}
-    credentials: 'same-origin'
-  document.querySelector('.buzzer').classList.remove('d-none')
-  document.querySelector('.answer').classList.add('d-none')
-  document.querySelector('.buzzer').setAttribute('disabled', 'disabled')
-  setTimeout (-> document.querySelector('.buzzer').removeAttribute('disabled')), 2000
-  false
+window.playerVue = new Vue
+  el: '#player-vue'
+  data:
+    inProgress: false
+    player: null
+    players: null
+    answering: false
+    buzzerDisabled: false
+    answer: null
+  created: ->
+    @inProgress = window.vue_data.inProgress
+    @player = window.vue_data.player
+    @players = window.vue_data.players
+  watch:
+    answer: (value) ->
+      App.gameChannel.send event: 'guessing', guess: value
+  methods:
+    buzzed: (data) -> @buzzerDisabled = data.player.id is @player.id
+    answered: -> @buzzerDisabled = false
+    gameStarted: -> @inProgress = true
+    startGame: (event) -> fetch(event.target.action, method: 'PUT')
+    buzz: ->
+      App.gameChannel.send event: 'buzz', player: @player
+      @answering = true
+    sendAnswer: (event) ->
+      fetch event.target.action,
+        method: 'POST'
+        body: JSON.stringify value: @answer
+        headers: {'Content-Type': 'application/json'}
+        credentials: 'same-origin'
+      @answering = false
+      @buzzerDisabled = true
+      @answer = null
+      setTimeout (=> @buzzerDisabled = false), 2000

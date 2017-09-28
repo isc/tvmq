@@ -1,24 +1,37 @@
 hr
-.row.justify-content-center
-  .col-lg-4.game class=('d-none' unless @game.in_progress?)
-    .card.timer-card.justify-content-center
+.row.justify-content-center#tv-vue
+  .col-lg-4.game v-if="inProgress && !buzzingPlayer"
+    .card.justify-content-center v-if="!displayResult"
       svg width="250" height="250" viewbox="0 0 250 250"
-        path id="border" transform="translate(125, 125)"
-        path id="loader" transform="translate(125, 125) scale(.84)"
-    .card.result-card
-      img.card-img-top
+        path id="border" transform="translate(125, 125)" :d="anim"
+        path id="loader" transform="translate(125, 125) scale(.84)" :d="anim"
+    .card v-if="displayResult"
+      img.card-img-top v-bind:src="currentTrack.artworkUrl30.replace('30x30', '400x400')"
       .card-body
-        h3.artistName.card-title
-        h4.trackName.card-subtitle
+        h3.card-title
+          '{{currentTrack.artistName}}
+        h4.card-subtitle
+          '{{currentTrack.trackName}}
         .card-text.text-muted
-          span.collectionName>
+          span>
+            '{{currentTrack.collectionName}}
           ' -
-          span.releaseYear
-  .col-lg-4.lobby.text-center class=('d-none' if @game.in_progress?)
+          span>
+            '{{currentTrack.releaseYear}}
+  .col-lg-4.lobby.text-center v-if="!inProgress"
     i.fa.fa-gamepad.fa-5x
-  .col-lg-6
-    .list-group
-      - @players.each do |player|
-        .list-group-item.d-flex.justify-content-between.align-items-center class="player-#{player.id}"
-          = player.name
-          span.badge.badge-primary.badge-pill= player.score
+  .col-lg-6 v-if="!buzzingPlayer"
+    player-listing :players="players" :in-progress="inProgress"
+
+  .modal.text-center v-if="buzzingPlayer"
+    .modal-dialog
+      .modal-content
+        .modal-header
+          h5
+            '{{buzzingPlayer.name}}
+        .modal-body
+          h5
+            '{{guess}}
+
+javascript:
+  vue_data = #{{ { inProgress: @game.in_progress?, players: @players }.to_json }}

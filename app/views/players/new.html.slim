@@ -1,9 +1,12 @@
 .container
   hr
-  h4.text-center C'est quoi ton blase ?
-  = form_tag players_path do
-    .form-row.justify-content-center
-      .col-auto
-        input.form-control autofocus=true name="name" placeholder="Pseudo" value=cookies[:player_name]
-      .col-auto
-        button.btn.btn-primary type="submit" Ok
+  .row.justify-content-center
+    .col.col-md-5
+      h4.text-center What's your nickname?
+      = form_tag players_path do
+        .form-row.justify-content-center
+          .col-auto
+            input.form-control autofocus=true name="name" placeholder="Pseudo" value=cookies[:player_name]
+          .col-auto
+            button.btn.btn-primary type="submit" Ok
+      = render 'tracks/link_to_new'

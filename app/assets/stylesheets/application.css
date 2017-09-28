@@ -19,15 +19,28 @@ svg {
   margin: 10px auto;
 }
 
-#loader 
-{ fill: #0088cc }
+#loader {
+  fill: #17a2b8;
+}
 
-#border 
-{ fill: #00517a }
+#border {
+  fill: #007bff;
+}
 
 .buzzer {
   width: 200px;
   height: 200px;
   border-radius: 50%;
   font-size: 400%;
+}
+
+.modal {
+  position: relative;
+  top: auto;
+  right: auto;
+  bottom: auto;
+  left: auto;
+  z-index: 1;
+  display: block;
+  width: 100%;
 }

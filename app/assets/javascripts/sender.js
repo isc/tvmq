@@ -7,6 +7,7 @@ if (!chrome.cast || !chrome.cast.isAvailable) {
 }
 
 function initializeCastApi() {
+  if (!chrome.cast) return
   var sessionRequest = new chrome.cast.SessionRequest(applicationID);
   var apiConfig = new chrome.cast.ApiConfig(sessionRequest, sessionListener, receiverListener);
   chrome.cast.initialize(apiConfig, onInitSuccess, onError);
@@ -37,11 +38,9 @@ function sessionListener(e) {
 
 function sessionUpdateListener(isAlive) {
   var message = isAlive ? 'Session Updated' : 'Session Removed';
-  message += ': ' + session.sessionId;
+  message += ': ' + session.sessionId
   console.log(message)
-  if (!isAlive) {
-    session = null;
-  }
+  if (!isAlive) session = null
 }
 
 function receiverMessage(namespace, message) {
@@ -62,15 +61,6 @@ function stopApp() {
 }
 
 function startCasting(message) {
-  if (session != null) {
-    session.sendMessage(namespace, message, onSuccess.bind(this, 'Message sent: ' + message),
-      onError);
-  }
-  else {
-    chrome.cast.requestSession(function(e) {
-        session = e;
-        session.sendMessage(namespace, message, onSuccess.bind(this, 'Message sent: ' +
-          message), onError);
-      }, onError);
-  }
+  if (session != null) return
+  chrome.cast.requestSession(function(e) { session = e; }, onError);
 }

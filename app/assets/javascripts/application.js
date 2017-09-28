@@ -12,4 +12,6 @@
 //
 //= require rails-ujs
 //= require turbolinks
+//= require vue
+//= require player_listing
 //= require_tree .
