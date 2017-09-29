@@ -2,7 +2,7 @@ var applicationID = 'B48444DF';
 var namespace = 'urn:x-cast:com.google.cast.sample.helloworld';
 var session = null;
 
-if (!chrome.cast || !chrome.cast.isAvailable) {
+if (!location.pathname.match('/tv') && (!chrome.cast || !chrome.cast.isAvailable)) {
   setTimeout(initializeCastApi, 1000);
 }
 
