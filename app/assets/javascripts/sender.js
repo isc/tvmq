@@ -1,5 +1,5 @@
 var applicationID = 'B48444DF';
-var namespace = 'urn:x-cast:com.google.cast.sample.helloworld';
+var namespace = 'urn:x-cast:com.herokuapp.tvmq';
 var session = null;
 
 if (!location.pathname.match('/tv') && (!chrome.cast || !chrome.cast.isAvailable)) {

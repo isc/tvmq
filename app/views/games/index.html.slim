@@ -9,11 +9,6 @@
         button.btn.btn-primary.btn-block
           i.fa.fa-play-circle>
           'Start game
-      hr
-      button.btn.btn-info.btn-block onclick="startCasting()"
-        i.fa.fa-chrome>
-        ' ChromeCast
-      = render 'tracks/link_to_new'
 
     .col.col-lg-3.text-center.game v-if="inProgress"
       button.btn.btn-primary.btn-danger.buzzer v-if="!answering" v-on:click="buzz" v-bind:disabled="buzzerDisabled"
@@ -22,6 +17,14 @@
         .form-group
           input.form-control v-model="answer" type="text" autofocus=true autocomplete="off"
         input.btn.btn-primary.btn-block type="submit" value="Send"
+
+  .row.justify-content-center v-if="!inProgress"
+    .col.col-md-5
+      hr
+      button.btn.btn-info.btn-block onclick="startCasting()"
+        i.fa.fa-chrome>
+        ' ChromeCast
+      = render 'tracks/link_to_new'
 
 javascript:
   vue_data = #{{ { player: @current_player, inProgress: @game.in_progress?, players: @players }.to_json }}

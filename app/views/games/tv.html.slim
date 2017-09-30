@@ -1,37 +1,62 @@
 hr
 .row.justify-content-center#tv-vue
-  .col-lg-4.game v-if="inProgress && !buzzingPlayer"
-    .card.justify-content-center v-if="!displayResult"
-      svg width="250" height="250" viewbox="0 0 250 250"
+  audio#player
+  .col-lg-4.game v-if="inProgress"
+    .card v-if="!buzzingPlayer"
+      img.card-img-top v-bind:src="currentTrack.artworkUrl30.replace('30x30', '400x400')" v-if="displayResult"
+      svg width="250" height="250" viewbox="0 0 250 250" v-if="!displayResult"
         path id="border" transform="translate(125, 125)" :d="anim"
         path id="loader" transform="translate(125, 125) scale(.84)" :d="anim"
-    .card v-if="displayResult"
-      img.card-img-top v-bind:src="currentTrack.artworkUrl30.replace('30x30', '400x400')"
       .card-body
         h3.card-title
-          '{{currentTrack.artistName}}
+          '{{artistName()}}
         h4.card-subtitle
-          '{{currentTrack.trackName}}
-        .card-text.text-muted
+          '{{trackName()}}
+        .card-text.text-muted v-if="displayResult"
           span>
             '{{currentTrack.collectionName}}
           ' -
           span>
             '{{currentTrack.releaseYear}}
+    .card.text-center v-if="buzzingPlayer"
+      h3.card-title
+        '{{buzzingPlayer.name}}
+      h4.card-subtitle
+        '{{guess}}
+
   .col-lg-4.lobby.text-center v-if="!inProgress"
     i.fa.fa-gamepad.fa-5x
-  .col-lg-6 v-if="!buzzingPlayer"
+  .col-lg-6
     player-listing :players="players" :in-progress="inProgress"
-
-  .modal.text-center v-if="buzzingPlayer"
-    .modal-dialog
-      .modal-content
-        .modal-header
-          h5
-            '{{buzzingPlayer.name}}
-        .modal-body
-          h5
-            '{{guess}}
 
 javascript:
   vue_data = #{{ { inProgress: @game.in_progress?, players: @players }.to_json }}
+
+script type="text/javascript" src="//www.gstatic.com/cast/sdk/libs/receiver/2.0.0/cast_receiver.js"
+javascript:
+  window.onload = function() {
+    cast.receiver.logger.setLevelValue(0)
+    window.castReceiverManager = cast.receiver.CastReceiverManager.getInstance()
+    castReceiverManager.onReady = function(event) {
+      console.log('Received Ready event: ' + JSON.stringify(event.data))
+      window.castReceiverManager.setApplicationState('TV Music Quiz')
+    }
+    castReceiverManager.onSenderConnected = function(event) {
+      console.log('Received Sender Connected event: ' + event.data)
+      console.log(window.castReceiverManager.getSender(event.data).userAgent)
+    }
+    castReceiverManager.onSenderDisconnected = function(event) {
+      console.log('Received Sender Disconnected event: ' + event.data)
+      if (window.castReceiverManager.getSenders().length == 0) window.close()
+    }
+    castReceiverManager.onSystemVolumeChanged = function(event) {
+      console.log('Received System Volume Changed event: ' + event.data['level'] + ' ' + event.data['muted'])
+    }
+    window.messageBus = window.castReceiverManager.getCastMessageBus('urn:x-cast:com.herokuapp.tvmq')
+    window.messageBus.onMessage = function(event) {
+      console.log('Message [' + event.senderId + ']: ' + event.data)
+      window.messageBus.send(event.senderId, event.data)
+    }
+    window.castReceiverManager.start({statusText: 'Application is starting'})
+    console.log('Receiver Manager started')
+  }
