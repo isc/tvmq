@@ -6,7 +6,7 @@ class Game < ApplicationRecord
   end
 
   def next_track
-    update current_track: Track.order('random()').first
+    update current_track: Track.order('random()').first, buzzing_player_id: nil
     current_track
   end
 
@@ -22,6 +22,7 @@ class Game < ApplicationRecord
     end
     result[:points] = 3 if result[:artist_found] && result[:track_found]
     result[:points] = -1 unless result[:artist_found] || result[:track_found]
+    update buzzing_player_id: nil
     result
   end
 

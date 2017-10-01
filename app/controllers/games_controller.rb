@@ -22,6 +22,15 @@ class GamesController < ApplicationController
     head :no_content
   end
 
+  def buzz
+    if Game.where(id: current_game.id, buzzing_player_id: nil).update_all(buzzing_player_id: current_player.id) == 1
+      ActionCable.server.broadcast('game', event: 'buzz', player: current_player)
+      render json: true
+    else
+      render json: false
+    end
+  end
+
   private
 
   def fetch_game_and_players

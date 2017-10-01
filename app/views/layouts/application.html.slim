@@ -13,5 +13,5 @@ html
     .container
       = yield
     javascript:
-      window.castApplicationId = #{Rails.env.production? ? '8DA3F257' : 'B48444DF'}
+      window.castApplicationId = '#{Rails.env.production? ? '8DA3F257' : 'B48444DF'}'
     = javascript_include_tag 'application'

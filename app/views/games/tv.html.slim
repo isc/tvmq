@@ -18,11 +18,11 @@ hr
           ' -
           span>
             '{{currentTrack.releaseYear}}
-    .card.text-center v-if="buzzingPlayer"
+    .card.bg-warning.text-white v-if="buzzingPlayer"
+      h3.card-header
+        '{{buzzingPlayer.name}}
       .card-body
-        h3.card-title
-          '{{buzzingPlayer.name}}
-        h4.card-subtitle
+        h4.card-title
           '{{guess}}
 
   .col-lg-4.lobby.text-center v-if="!inProgress"

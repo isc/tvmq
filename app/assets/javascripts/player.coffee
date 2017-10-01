@@ -23,9 +23,14 @@ window.playerVue = new Vue
     answered: (data) -> @buzzerDisabled = data.player.id is @player.id
     gameStarted: -> @inProgress = true
     startGame: (event) -> fetch(event.target.action, method: 'PUT')
-    buzz: ->
-      App.gameChannel.send event: 'buzz', player: @player
-      @answering = true
+    buzz: (event) ->
+      @buzzerDisabled = true
+      fetch event.target.action,
+        method: 'POST'
+        headers: {'Content-Type': 'application/json'}
+        credentials: 'same-origin'
+      .then((r) -> r.json()).then (data) =>
+        @answering = data
     sendAnswer: (event) ->
       fetch event.target.action,
         method: 'POST'
