@@ -1,4 +1,3 @@
-var applicationID = 'B48444DF';
 var namespace = 'urn:x-cast:com.herokuapp.tvmq';
 var session = null;
 
@@ -8,7 +7,7 @@ if (!location.pathname.match('/tv') && (!chrome.cast || !chrome.cast.isAvailable
 
 function initializeCastApi() {
   if (!chrome.cast) return
-  var sessionRequest = new chrome.cast.SessionRequest(applicationID);
+  var sessionRequest = new chrome.cast.SessionRequest(window.castApplicationId);
   var apiConfig = new chrome.cast.ApiConfig(sessionRequest, sessionListener, receiverListener);
   chrome.cast.initialize(apiConfig, onInitSuccess, onError);
 }

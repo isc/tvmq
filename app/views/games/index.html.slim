@@ -11,7 +11,7 @@
           'Start game
 
     .col.col-lg-3.text-center.game v-if="inProgress"
-      button.btn.btn-primary.btn-danger.buzzer v-if="!answering" v-on:click="buzz" v-bind:disabled="buzzerDisabled"
+      button.btn.btn-primary.btn-danger.buzzer v-if="!answering" v-on:click="buzz" v-bind:disabled="buzzerDisabled || !playing"
         i.fa.fa-bullhorn
       = form_tag answer_game_path(@game), 'v-if': 'answering', 'v-on:submit.prevent': 'sendAnswer($event)'
         .form-group

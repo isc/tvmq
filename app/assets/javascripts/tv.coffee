@@ -33,8 +33,10 @@ window.tvVue = new Vue
         @currentTrack.releaseYear = data.releaseDate.split('-')[0]
         console.log(data.artistName, data.trackName)
         @audio.play()
+        App.gameChannel.send event: 'play'
     displayResultCard: ->
       @displayResult = true
+      App.gameChannel.send event: 'pause'
       setTimeout @playNextSong, 7000
     buzzed: (data) ->
       @buzzingPlayer = data.player
@@ -42,7 +44,7 @@ window.tvVue = new Vue
     answered: (data) ->
       @buzzingPlayer = null
       Vue.set @players, @players.findIndex((p) -> p.id is data.player.id), data.player
-      @players.sort((p1, p2) => p1.score - p2.score)
+      @players.sort((p1, p2) => p2.score - p1.score)
       @currentTrack.artistFound ||= data.artist_found
       @currentTrack.trackFound ||= data.track_found
       @audio.play()
@@ -54,5 +56,5 @@ window.tvVue = new Vue
       x = Math.sin(r) * 125
       y = Math.cos(r) * -125
       mid = if α > 180 then 1 else 0
-      @anim = "M 0 0 v -125 A 125 125 1 #{mid} 1 #{x} #{y} z"
+      @anim = "M 0 0 v -125 A 125 125 1 #{mid} 1 #{x} #{y} z" unless isNaN(x)
       setTimeout (=> @draw()), 500

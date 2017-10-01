@@ -19,10 +19,11 @@ hr
           span>
             '{{currentTrack.releaseYear}}
     .card.text-center v-if="buzzingPlayer"
-      h3.card-title
-        '{{buzzingPlayer.name}}
-      h4.card-subtitle
-        '{{guess}}
+      .card-body
+        h3.card-title
+          '{{buzzingPlayer.name}}
+        h4.card-subtitle
+          '{{guess}}
 
   .col-lg-4.lobby.text-center v-if="!inProgress"
     i.fa.fa-gamepad.fa-5x
