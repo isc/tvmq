@@ -18,11 +18,11 @@ window.tvVue = new Vue
     @audio = document.getElementById('player')
     @audio.addEventListener 'playing', @draw
     @audio.addEventListener 'ended', @displayResultCard
-    @quack = document.getElementById('quack')
-    @uh_oh = document.getElementById('uh_oh')
-    @uh_oh.addEventListener 'ended', => @audio.play()
-    @eep = document.getElementById('eep')
-    @eep.addEventListener 'ended', => @audio.play()
+    # @quack = document.getElementById('quack')
+    # @uh_oh = document.getElementById('uh_oh')
+    # @uh_oh.addEventListener 'ended', => @audio.play()
+    # @eep = document.getElementById('eep')
+    # @eep.addEventListener 'ended', => @audio.play()
   methods:
     artistName: -> if @currentTrack?.artistFound or @displayResult then @currentTrack.artistName else '?'
     trackName: -> if @currentTrack?.trackFound or @displayResult then @currentTrack.trackName else '?'
@@ -48,9 +48,9 @@ window.tvVue = new Vue
     buzzed: (data) ->
       @buzzingPlayer = data.player
       @audio.pause()
-      @quack.play()
+      # @quack.play()
     answered: (data) ->
-      (if data.points is -1 then @uh_oh else @eep).play()
+      # (if data.points is -1 then @uh_oh else @eep).play()
       @buzzingPlayer = null
       Vue.set @players, @players.findIndex((p) -> p.id is data.player.id), data.player
       @players.sort((p1, p2) => p2.score - p1.score)

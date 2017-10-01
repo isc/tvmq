@@ -1,9 +1,9 @@
 hr
 .row.justify-content-center#tv-vue
   audio#player
-  audio#quack src="/Quack.m4a"
-  audio#eep src="/Wild Eep.m4a"
-  audio#uh_oh src="/Uh oh.m4a"
+  / audio#quack src="/Quack.m4a"
+  / audio#eep src="/Wild Eep.m4a"
+  / audio#uh_oh src="/Uh oh.m4a"
   .col-lg-4.game v-if="inProgress"
     .card v-if="!buzzingPlayer"
       img.card-img-top v-bind:src="currentTrack.artworkUrl30.replace('30x30', '400x400')" v-if="displayResult"
