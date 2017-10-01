@@ -14,7 +14,7 @@
       = form_tag buzz_game_path(@game), 'v-show': '!answering', 'v-on:submit.prevent': 'buzz($event)'
         button.btn.btn-primary.btn-danger.buzzer v-bind:disabled="buzzerDisabled || !playing"
           i.fa.fa-bullhorn
-      = form_tag answer_game_path(@game), 'v-show': 'answering', 'v-on:submit.prevent': 'sendAnswer($event)'
+      = form_tag answer_game_path(@game), 'v-show': 'answering', 'v-on:submit.prevent': 'sendAnswer($event)', ref: 'answerForm'
         .form-group
           input.form-control ref="answer" v-model="answer" type="text" autocomplete="off" autocorrect="off"
         input.btn.btn-primary.btn-block type="submit" value="Send"

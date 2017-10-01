@@ -32,6 +32,7 @@ window.playerVue = new Vue
       .then((r) -> r.json()).then (data) =>
         @answering = data
         setTimeout (=> @$refs.answer.focus()), 0
+        setTimeout (=> @sendAnswer(target: @$refs.answerForm)), 15000
     sendAnswer: (event) ->
       fetch event.target.action,
         method: 'POST'

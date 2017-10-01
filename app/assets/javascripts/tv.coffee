@@ -38,8 +38,7 @@ window.tvVue = new Vue
       return if @displayResult
       @displayResult = true
       App.gameChannel.send event: 'pause'
-      pauseDelay = if @currentTrack.trackFound and @currentTrack.artistFound then 1000 else 7000
-      setTimeout @playNextSong, pauseDelay
+      setTimeout @playNextSong, 5000
     buzzed: (data) ->
       @buzzingPlayer = data.player
       @audio.pause()
