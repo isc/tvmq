@@ -18,10 +18,10 @@ window.tvVue = new Vue
     @audio = document.getElementById('player')
     @audio.addEventListener 'playing', @draw
     @audio.addEventListener 'ended', @displayResultCard
-    @quack = new Audio '/Quack.m4a'
-    @uh_oh = new Audio '/Uh oh.m4a'
+    @quack = document.getElementById('quack')
+    @uh_oh = document.getElementById('uh_oh')
     @uh_oh.addEventListener 'ended', => @audio.play()
-    @eep = new Audio '/Wild Eep.m4a'
+    @eep = document.getElementById('eep')
     @eep.addEventListener 'ended', => @audio.play()
   methods:
     artistName: -> if @currentTrack?.artistFound or @displayResult then @currentTrack.artistName else '?'
