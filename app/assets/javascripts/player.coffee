@@ -31,9 +31,11 @@ window.playerVue = new Vue
         credentials: 'same-origin'
       .then((r) -> r.json()).then (data) =>
         @answering = data
+        return unless @answering
         setTimeout (=> @$refs.answer.focus()), 0
-        setTimeout (=> @sendAnswer(target: @$refs.answerForm)), 15000
+        @answerTimeout = setTimeout (=> @sendAnswer(target: @$refs.answerForm)), 15000
     sendAnswer: (event) ->
+      clearTimeout @answerTimeout
       fetch event.target.action,
         method: 'POST'
         body: JSON.stringify value: @answer
@@ -42,4 +44,4 @@ window.playerVue = new Vue
       @answering = false
       @buzzerDisabled = true
       @answer = null
-      setTimeout (=> @buzzerDisabled = false), 2000
+      setTimeout (=> @buzzerDisabled = false), 3000
