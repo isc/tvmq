@@ -21,10 +21,13 @@ class GameTest < ActiveSupport::TestCase
   end
 
   test 'evaluate' do
-    track = Track.new(data: {artistName: 'Tryö', trackName: 'L\'hymne de nos çampagnes'})
-    game = Game.new current_track: track
+    track = Track.create(data: {artistName: 'Tryö', trackName: 'L\'hymne de nos çampagnes'})
+    game = Game.create current_track: track
     result = game.evaluate 'hymne de nos tryo campagnes'
     assert_equal({artist_found: true, track_found: true, points: 3}, result)
+    assert game.artist_found
+    game.next_track
+    refute game.artist_found
   end
 
   test 'evaluate persist found parts' do

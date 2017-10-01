@@ -6,7 +6,8 @@ class Game < ApplicationRecord
   end
 
   def next_track
-    update! current_track: Track.order('random()').first, buzzing_player_id: nil
+    update! current_track: Track.order('random()').first,
+      buzzing_player_id: nil, artist_found: false, track_found: false
     current_track
   end
 
