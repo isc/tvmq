@@ -18,6 +18,11 @@ window.tvVue = new Vue
     @audio = document.getElementById('player')
     @audio.addEventListener 'playing', @draw
     @audio.addEventListener 'ended', @displayResultCard
+    @quack = new Audio '/Quack.m4a'
+    @uh_oh = new Audio '/Uh oh.m4a'
+    @uh_oh.addEventListener 'ended', => @audio.play()
+    @eep = new Audio '/Wild Eep.m4a'
+    @eep.addEventListener 'ended', => @audio.play()
   methods:
     artistName: -> if @currentTrack?.artistFound or @displayResult then @currentTrack.artistName else '?'
     trackName: -> if @currentTrack?.trackFound or @displayResult then @currentTrack.trackName else '?'
@@ -35,19 +40,22 @@ window.tvVue = new Vue
         @audio.play()
         App.gameChannel.send event: 'play'
     displayResultCard: ->
+      return if @displayResult
       @displayResult = true
       App.gameChannel.send event: 'pause'
-      setTimeout @playNextSong, 7000
+      pauseDelay = if @currentTrack.trackFound and @currentTime.artistFound then 1000 else 7000
+      setTimeout @playNextSong, pauseDelay
     buzzed: (data) ->
       @buzzingPlayer = data.player
       @audio.pause()
+      @quack.play()
     answered: (data) ->
+      (if data.points is -1 then @uh_oh else @eep).play()
       @buzzingPlayer = null
       Vue.set @players, @players.findIndex((p) -> p.id is data.player.id), data.player
       @players.sort((p1, p2) => p2.score - p1.score)
       @currentTrack.artistFound ||= data.artist_found
       @currentTrack.trackFound ||= data.track_found
-      @audio.play()
       @displayResultCard() if @currentTrack.artistFound && @currentTrack.trackFound
     draw: ->
       return if @audio.currentTime is @audio.duration

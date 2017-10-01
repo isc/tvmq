@@ -2,7 +2,7 @@
   hr
   .row.justify-content-center
 
-    .col.col-md-5.lobby v-if="!inProgress"
+    .col.col-md-5.lobby v-show="!inProgress"
       player-listing :players="players" :player-id="player.id" :in-progress="inProgress"
       hr
       = form_tag game_path(@game), 'v-on:submit.prevent': 'startGame($event)'
@@ -10,16 +10,16 @@
           i.fa.fa-play-circle>
           'Start game
 
-    .col.col-lg-3.text-center.game v-if="inProgress"
-      = form_tag buzz_game_path(@game), 'v-if': '!answering', 'v-on:submit.prevent': 'buzz($event)'
+    .col.col-lg-3.text-center.game v-show="inProgress"
+      = form_tag buzz_game_path(@game), 'v-show': '!answering', 'v-on:submit.prevent': 'buzz($event)'
         button.btn.btn-primary.btn-danger.buzzer v-bind:disabled="buzzerDisabled || !playing"
           i.fa.fa-bullhorn
-      = form_tag answer_game_path(@game), 'v-if': 'answering', 'v-on:submit.prevent': 'sendAnswer($event)'
+      = form_tag answer_game_path(@game), 'v-show': 'answering', 'v-on:submit.prevent': 'sendAnswer($event)'
         .form-group
-          input.form-control v-model="answer" type="text" autofocus=true autocomplete="off"
+          input.form-control ref="answer" v-model="answer" type="text" autocomplete="off" autocorrect="off"
         input.btn.btn-primary.btn-block type="submit" value="Send"
 
-  .row.justify-content-center v-if="!inProgress"
+  .row.justify-content-center v-show="!inProgress"
     .col.col-md-5
       hr
       button.btn.btn-info.btn-block onclick="startCasting()"

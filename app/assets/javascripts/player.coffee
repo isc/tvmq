@@ -31,6 +31,7 @@ window.playerVue = new Vue
         credentials: 'same-origin'
       .then((r) -> r.json()).then (data) =>
         @answering = data
+        setTimeout (=> @$refs.answer.focus()), 0
     sendAnswer: (event) ->
       fetch event.target.action,
         method: 'POST'
