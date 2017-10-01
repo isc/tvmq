@@ -35,6 +35,6 @@ class GamesController < ApplicationController
 
   def fetch_game_and_players
     @game = current_game
-    @players = Player.all
+    @players = Player.order(score: :desc).all
   end
 end
