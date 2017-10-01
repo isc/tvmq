@@ -15,10 +15,10 @@ class GamesController < ApplicationController
   end
 
   def answer
-    evaluation = current_game.evaluate params[:value]
-    ActionCable.server.broadcast('game', evaluation.merge(event: 'answer', player: current_player))
+    evaluation = current_game.evaluate params[:value].to_s
     current_player.score += evaluation[:points]
     current_player.save
+    ActionCable.server.broadcast('game', evaluation.merge(event: 'answer', player: current_player))
     head :no_content
   end
 
