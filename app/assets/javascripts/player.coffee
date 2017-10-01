@@ -14,6 +14,7 @@ window.playerVue = new Vue
     @inProgress = window.vue_data.inProgress
     @player = window.vue_data.player
     @players = window.vue_data.players
+    @quack = new Audio '/Quack.mp3'
   watch:
     answer: (value) -> App.gameChannel.send event: 'guessing', guess: value
   methods:
@@ -34,6 +35,7 @@ window.playerVue = new Vue
         return unless @answering
         setTimeout (=> @$refs.answer.focus()), 0
         @answerTimeout = setTimeout (=> @sendAnswer(target: @$refs.answerForm)), 15000
+      @quack.play()
     sendAnswer: (event) ->
       clearTimeout @answerTimeout
       fetch event.target.action,
