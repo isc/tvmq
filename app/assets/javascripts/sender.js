@@ -5,11 +5,23 @@ if (!location.pathname.match('/tv') && (!chrome.cast || !chrome.cast.isAvailable
   setTimeout(initializeCastApi, 1000);
 }
 
+window['__onGCastApiAvailable'] = function(isLoaded, error) {
+  if (isLoaded) {
+    initializeCastApi();
+  } else {
+    console.log(error);
+  }
+}
+
 function initializeCastApi() {
   if (!chrome.cast) return
-  var sessionRequest = new chrome.cast.SessionRequest(window.castApplicationId);
-  var apiConfig = new chrome.cast.ApiConfig(sessionRequest, sessionListener, receiverListener);
-  chrome.cast.initialize(apiConfig, onInitSuccess, onError);
+  cast.framework.CastContext.getInstance().setOptions({
+    receiverApplicationId: window.castApplicationId,
+    autoJoinPolicy: chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED
+  });
+  // var sessionRequest = new chrome.cast.SessionRequest(window.castApplicationId);
+  // var apiConfig = new chrome.cast.ApiConfig(sessionRequest, sessionListener, receiverListener);
+  // chrome.cast.initialize(apiConfig, onInitSuccess, onError);
 }
 
 function onInitSuccess() {
@@ -60,6 +72,13 @@ function stopApp() {
 }
 
 function startCasting(message) {
-  if (session != null) return
-  chrome.cast.requestSession(function(e) { session = e; }, onError);
+  // if (session != null) return
+  chrome.cast.requestSession(function(e) {
+    var mediaInfo = new chrome.cast.media.MediaInfo('/tv', 'html');
+    var request = new chrome.cast.media.LoadRequest(mediaInfo);
+    e.loadMedia(request).then(
+      function() { console.log('Load succeed'); },
+      function(errorCode) { console.log('Error code: ' + errorCode); });
+  }, onError);
+  // var castSession = cast.framework.CastContext.getInstance().getCurrentSession();
 }
