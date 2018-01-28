@@ -6,6 +6,6 @@ class ApplicationController < ActionController::Base
   end
 
   def current_game
-    Game.where.not(state: 'ended').first || Game.create(state: 'lobby')
+    Game.current_game
   end
 end

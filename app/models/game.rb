@@ -12,6 +12,15 @@ class Game < ApplicationRecord
     current_track
   end
 
+  def current_game
+    game = where.not(state: 'ended').first
+    if game && game.updated_at < 15.minutes.ago
+      game.update! state: 'ended'
+      game = nil
+    end
+    game || create(state: 'lobby')
+  end
+
   def evaluate(value)
     result = { artist_found: false, track_found: false, points: 1 }
     if !artist_found && is_a_match?(current_track.data['artistName'], value)
