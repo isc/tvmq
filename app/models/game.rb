@@ -12,7 +12,7 @@ class Game < ApplicationRecord
     current_track
   end
 
-  def current_game
+  def self.current_game
     game = where.not(state: 'ended').first
     if game && game.updated_at < 15.minutes.ago
       Player.delete_all
