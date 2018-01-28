@@ -9,6 +9,7 @@ html
   body
     nav.navbar.navbar-dark.bg-primary
       span.navbar-text TV Music Quiz
+      span.navbar-text.pull-right= @current_player&.name
     .container
       = yield
     javascript:

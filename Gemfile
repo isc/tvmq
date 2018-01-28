@@ -55,5 +55,6 @@ group :development do
 end
 
 group :production do
+  gem 'redis'
   gem 'redis-rails'
 end
