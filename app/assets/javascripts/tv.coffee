@@ -37,7 +37,6 @@ window.tvVue = new Vue
     displayResultCard: ->
       return if @displayResult
       @displayResult = true
-      App.gameChannel.send event: 'pause'
       setTimeout @playNextSong, 5000
     buzzed: (data) ->
       @buzzingPlayer = data.player

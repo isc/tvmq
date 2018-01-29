@@ -35,6 +35,7 @@ class Game < ApplicationRecord
     update! buzzing_player_id: nil,
       artist_found: (artist_found || result[:artist_found]),
       track_found: (track_found || result[:track_found])
+    result[:track_done] = artist_found && track_found
     result
   end
 

@@ -8,4 +8,3 @@ App.gameChannel = App.cable.subscriptions.create { channel: 'GameChannel' },
     component.answered(data) if data.event is 'answer'
     component.guessUpdated(data) if data.event is 'guessing' and component.guessUpdated
     component.play() if data.event is 'play' and component.play
-    component.pause() if data.event is 'pause' and component.pause

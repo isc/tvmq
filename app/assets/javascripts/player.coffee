@@ -18,10 +18,11 @@ window.playerVue = new Vue
   watch:
     answer: (value) -> App.gameChannel.send event: 'guessing', guess: value
   methods:
-    pause: -> @playing = false
     play: -> @playing = true
     buzzed: -> @buzzerDisabled = true
-    answered: (data) -> @buzzerDisabled = data.player.id is @player.id
+    answered: (data) ->
+      @buzzerDisabled = data.player.id is @player.id
+      @playing = false if data.track_done
     gameStarted: -> @inProgress = true
     startGame: (event) -> fetch(event.target.action, method: 'PUT')
     buzz: (event) ->
